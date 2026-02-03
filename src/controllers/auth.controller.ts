@@ -4,7 +4,7 @@ import { Observable } from "rxjs";
 
 @Controller('auth')
 export class AuthController {
-    constructor(@Inject('AUTH_SERVICE') private authClient: ClientProxy) { }
+    constructor(@Inject('AUTH_SERVICE') private readonly authClient: ClientProxy) { }
 
     @Post('signUp')
     signUp(@Body() body: any): Observable<any> {
