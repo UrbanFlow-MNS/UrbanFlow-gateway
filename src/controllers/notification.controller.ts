@@ -36,9 +36,4 @@ export class NotificationController {
     remove(@Param('id') id: string): Observable<any> {
         return this.notificationClient.send({ cmd: 'notifications.remove' }, id)
     }
-
-    @Post('send-email')
-    sendEmail(@Body() body: any): Observable<any> {
-        return this.notificationClient.send({ cmd: 'notifications.sendEmail' }, body)
-    }
 }
