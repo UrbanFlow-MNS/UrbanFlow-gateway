@@ -21,4 +21,9 @@ export class AuthController {
         return this.authClient.send({ cmd: 'auth.refreshToken' }, refreshToken)
     }
 
+    @Post('forgot-password/:email')
+    forgotPassword(@Param('email') email: string): Observable<any> {
+        return this.authClient.send({ cmd: 'auth.forgotPassword' }, email)
+    }
+
 }
