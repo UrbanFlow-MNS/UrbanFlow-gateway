@@ -1,4 +1,4 @@
-import { Body, Controller, ForbiddenException, Inject, Param, ParseIntPipe, Post, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, ForbiddenException, Inject, Param, ParseIntPipe, Post, UseGuards } from "@nestjs/common";
 import { ClientProxy } from "@nestjs/microservices";
 import { Observable } from "rxjs";
 import { CurrentUser } from "../decorators/current-user.decorator";
@@ -19,5 +19,17 @@ export class UserController {
             throw new ForbiddenException('You can only update your own password');
         }
         return this.userClient.send({ cmd: 'user.updatePassword' }, { id, body });
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Delete(':id')
+    deleteUser(
+        @Param('id', ParseIntPipe) id: number,
+        @CurrentUser() user: JwtPayload,
+    ): Observable<any> {
+        if (user.sub !== id) {
+            throw new ForbiddenException('You can only delete your own account');
+        }
+        return this.userClient.send({ cmd: 'user.deleteUser' }, { id });
     }
 }
