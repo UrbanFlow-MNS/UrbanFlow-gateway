@@ -5,8 +5,10 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthController } from './controllers/auth.controller';
+import { PrometheusController } from './controllers/prometheus.controller';
 import { UserController } from './controllers/user.controller';
 import { JwtAuthGuard } from './guards/jwt.guard';
+import { PrometheusService } from './services/prometheus.service';
 
 @Module({
     imports: [
@@ -34,7 +36,12 @@ import { JwtAuthGuard } from './guards/jwt.guard';
             }
         ]),
     ],
-    controllers: [AppController, AuthController, UserController],
-    providers: [AppService, JwtAuthGuard],
+    controllers: [AppController, AuthController, UserController, PrometheusController],
+    providers: [
+        AppService,
+        JwtAuthGuard,
+        PrometheusService,
+        { provide: 'IPrometheusService', useClass: PrometheusService },
+    ],
 })
 export class AppModule { }
