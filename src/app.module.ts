@@ -1,18 +1,22 @@
 import { Module } from '@nestjs/common';
+import { HttpModule } from '@nestjs/axios';
 import { ConfigModule } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthController } from './controllers/auth.controller';
+import { IncidentController } from './controllers/incident.controller';
 import { PrometheusController } from './controllers/prometheus.controller';
 import { UserController } from './controllers/user.controller';
 import { JwtAuthGuard } from './guards/jwt.guard';
+import { IncidentService } from './services/incident.service';
 import { PrometheusService } from './services/prometheus.service';
 
 @Module({
     imports: [
         ConfigModule.forRoot({ isGlobal: true }),
+        HttpModule,
         JwtModule.register({
             global: true,
             secret: process.env.JWT_SECRET,
@@ -36,10 +40,11 @@ import { PrometheusService } from './services/prometheus.service';
             }
         ]),
     ],
-    controllers: [AppController, AuthController, UserController, PrometheusController],
+    controllers: [AppController, AuthController, UserController, PrometheusController, IncidentController],
     providers: [
         AppService,
         JwtAuthGuard,
+        IncidentService,
         PrometheusService,
         { provide: 'IPrometheusService', useClass: PrometheusService },
     ],
