@@ -46,6 +46,14 @@ import { PrometheusService } from './services/prometheus.service';
           },
         },
       },
+      {
+        name: 'MONITORING_SERVICE',
+        transport: Transport.TCP,
+        options: {
+          host: process.env.MONITORING_SERVICE_HOST || 'localhost',
+          port: Number.parseInt(process.env.MONITORING_SERVICE_PORT || '4005'),
+        },
+      },
     ]),
   ],
   controllers: [
