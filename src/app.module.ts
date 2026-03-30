@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { HttpModule } from '@nestjs/axios';
 import { ConfigModule } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { ClientsModule, Transport } from '@nestjs/microservices';
@@ -10,13 +9,11 @@ import { IncidentController } from './controllers/incident.controller';
 import { PrometheusController } from './controllers/prometheus.controller';
 import { UserController } from './controllers/user.controller';
 import { JwtAuthGuard } from './guards/jwt.guard';
-import { IncidentService } from './services/incident.service';
 import { PrometheusService } from './services/prometheus.service';
 
 @Module({
     imports: [
         ConfigModule.forRoot({ isGlobal: true }),
-        HttpModule,
         JwtModule.register({
             global: true,
             secret: process.env.JWT_SECRET,
@@ -37,6 +34,14 @@ import { PrometheusService } from './services/prometheus.service';
                     host: process.env.USER_SERVICE_HOST || 'localhost',
                     port: Number.parseInt(process.env.USER_SERVICE_PORT || '4001'),
                 },
+            },
+            {
+                name: 'INCIDENTS_SERVICE',
+                transport: Transport.TCP,
+                options: {
+                    host: process.env.INCIDENT_SERVICE_HOST || 'localhost',
+                    port: Number.parseInt(process.env.INCIDENT_SERVICE_PORT || '6004'),
+                },
             }
         ]),
     ],
@@ -44,7 +49,6 @@ import { PrometheusService } from './services/prometheus.service';
     providers: [
         AppService,
         JwtAuthGuard,
-        IncidentService,
         PrometheusService,
         { provide: 'IPrometheusService', useClass: PrometheusService },
     ],
