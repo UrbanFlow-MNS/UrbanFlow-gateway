@@ -5,6 +5,7 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthController } from './controllers/auth.controller';
+import { IncidentController } from './controllers/incident.controller';
 import { PrometheusController } from './controllers/prometheus.controller';
 import { UserController } from './controllers/user.controller';
 import { LogsController } from './controllers/logs.controller';
@@ -36,6 +37,14 @@ import { PrometheusService } from './services/prometheus.service';
         },
       },
       {
+        name: 'INCIDENTS_SERVICE',
+        transport: Transport.TCP,
+        options: {
+          host: process.env.INCIDENT_SERVICE_HOST || 'localhost',
+          port: Number.parseInt(process.env.INCIDENT_SERVICE_PORT || '6004'),
+        },
+      },
+      {
         name: 'LOGS_SERVICE',
         transport: Transport.RMQ,
         options: {
@@ -61,6 +70,7 @@ import { PrometheusService } from './services/prometheus.service';
     AuthController,
     UserController,
     PrometheusController,
+    IncidentController,
     LogsController,
   ],
   providers: [
