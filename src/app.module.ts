@@ -25,8 +25,11 @@ import { TripsHttpService } from './controllers/trips.httpservice';
             global: true,
             secret: process.env.JWT_SECRET,
         }),
-        HttpModule,                                                   
-        ClientsModule.register([
+        HttpModule.register({
+            baseURL: process.env.TRIP_SERVICE_URL,
+            timeout: 5000,
+            }),
+            ClientsModule.register([
             {
                 name: 'AUTH_SERVICE',
                 transport: Transport.TCP,
