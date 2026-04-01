@@ -25,10 +25,7 @@ import { TripsHttpService } from './controllers/trips.httpservice';
             global: true,
             secret: process.env.JWT_SECRET,
         }),
-        HttpModule.register({
-            baseURL: process.env.TRIP_SERVICE_URL,
-            timeout: 5000,
-            }),
+        HttpModule,
             ClientsModule.register([
             {
                 name: 'AUTH_SERVICE',
@@ -53,12 +50,6 @@ import { TripsHttpService } from './controllers/trips.httpservice';
         AuthController,
         UserController,
         PrometheusController,
-        AgencyController,
-        CalendarController,
-        RoutesController,
-        RouteTypeController,
-        StopsController,
-        TripController,
     ],
     providers: [
         AppService,
