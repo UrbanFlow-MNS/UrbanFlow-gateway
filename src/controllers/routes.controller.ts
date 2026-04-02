@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
 import { Observable } from 'rxjs';
-import { TripsHttpService } from '../controllers/trips.httpservice';
+import { TripsHttpService } from '../services/httpservice.service';
 
 @Controller('routes')
 export class RoutesController {

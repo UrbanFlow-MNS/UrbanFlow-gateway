@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { Observable } from 'rxjs';
-import { TripsHttpService } from '../controllers/trips.httpservice';
+import { TripsHttpService } from '../services/httpservice.service';
 
 @Controller('calendar')
 export class CalendarController {
