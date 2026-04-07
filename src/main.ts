@@ -4,6 +4,7 @@ import { GlobalGatewayExceptionFilter } from './exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.setGlobalPrefix('api');
   app.useGlobalFilters(new GlobalGatewayExceptionFilter());
   await app.listen(process.env.API_PORT ?? 3000);
 }
