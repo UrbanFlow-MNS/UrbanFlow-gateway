@@ -20,7 +20,7 @@ import {
   ServerDatastampBody,
 } from '@bato-urbanflow/urbanflow-models';
 
-@Controller()
+@Controller('monitoring')
 export class MonitoringGatewayController {
   constructor(
     @Inject('MONITORING_SERVICE') private readonly client: ClientProxy,
