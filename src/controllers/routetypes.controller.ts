@@ -1,10 +1,10 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { Observable } from 'rxjs';
-import { TripsHttpService } from '../services/httpservice.service';
+import { HttpService } from '../services/httpservice.service';
 
 @Controller('routetype')
 export class RouteTypeController {
-    constructor(private readonly trips: TripsHttpService) {}
+    constructor(private readonly trips: HttpService) {}
 
     @Post('create')
     createRouteType(@Body() body: any): Observable<any> {

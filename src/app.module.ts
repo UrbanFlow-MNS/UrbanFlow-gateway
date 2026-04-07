@@ -18,7 +18,7 @@ import { TripController } from './controllers/trip.controller';
 import { LogsController } from './controllers/logs.controller';
 import { JwtAuthGuard } from './guards/jwt.guard';
 import { PrometheusService } from './services/prometheus.service';
-import { TripsHttpService } from './services/httpservice.service';    
+import { HttpService } from './services/httpservice.service';
 
 @Module({
   imports: [
@@ -87,12 +87,13 @@ import { TripsHttpService } from './services/httpservice.service';
     RouteTypeController,
     StopsController,
     TripController,
+    TripPlannerController,
   ],
   providers: [
     AppService,
     JwtAuthGuard,
     PrometheusService,
-    TripsHttpService,                                             
+    HttpService,
     { provide: 'IPrometheusService', useClass: PrometheusService },
   ],
 })
