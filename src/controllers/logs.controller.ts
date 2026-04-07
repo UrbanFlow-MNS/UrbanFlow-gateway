@@ -1,11 +1,13 @@
 import {
     Body, Controller, Delete, Get, Inject, Param,
-    Post, Put, Query, ParseIntPipe
+    Post, Put, Query, ParseIntPipe, UseGuards,
 } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { Observable } from 'rxjs';
 import { LogBody, LogEventType } from '@bato-urbanflow/urbanflow-models';
+import { JwtAuthGuard } from '../guards/jwt.guard';
 
+@UseGuards(JwtAuthGuard)
 @Controller('logs')
 export class LogsController {
     constructor(@Inject('LOGS_SERVICE') private readonly logsClient: ClientProxy) {}
@@ -25,7 +27,6 @@ export class LogsController {
             { numberOfElement, startingElement, codeOfEvent, microserviceName, startDate, endDate }
         );
     }
-
 
     @Post()
     create(@Body() log: LogBody): Observable<LogBody> {

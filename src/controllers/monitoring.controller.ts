@@ -8,7 +8,7 @@ import {
   Post,
   Put,
   Query,
-  Res,
+  Res, UseGuards,
 } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { Observable, map } from 'rxjs';
@@ -19,7 +19,9 @@ import {
   MicroserviceBody,
   ServerDatastampBody,
 } from '@bato-urbanflow/urbanflow-models';
+import { JwtAuthGuard } from '../guards/jwt.guard';
 
+@UseGuards(JwtAuthGuard)
 @Controller('monitoring')
 export class MonitoringGatewayController {
   constructor(
