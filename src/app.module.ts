@@ -1,32 +1,36 @@
+import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
-import { HttpModule } from '@nestjs/axios';                          
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { AuthController } from './controllers/auth.controller';
-import { IncidentController } from './controllers/incident.controller';
-import { PrometheusController } from './controllers/prometheus.controller';
-import { UserController } from './controllers/user.controller';
 import { AgencyController } from './controllers/agency.controller';
+import { AuthController } from './controllers/auth.controller';
 import { CalendarController } from './controllers/calendar.controller';
+import { IncidentController } from './controllers/incident.controller';
+import { LogsController } from './controllers/logs.controller';
+import { PrometheusController } from './controllers/prometheus.controller';
 import { RoutesController } from './controllers/routes.controller';
 import { RouteTypeController } from './controllers/routetypes.controller';
 import { StopsController } from './controllers/stops.controller';
 import { TripController } from './controllers/trip.controller';
-import { LogsController } from './controllers/logs.controller';
-import { JwtAuthGuard } from './guards/jwt.guard';
-import { PrometheusService } from './services/prometheus.service';
-import { TripHttpService } from './services/httpservice.service';
 import { TripPlannerController } from './controllers/tripPlanner.controller';
+import { UserController } from './controllers/user.controller';
+import { JwtAuthGuard } from './guards/jwt.guard';
+import { TripHttpService } from './services/httpservice.service';
+import { PrometheusService } from './services/prometheus.service';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
-    JwtModule.register({
+    JwtModule.registerAsync({
       global: true,
-      secret: process.env.JWT_SECRET,
+      imports: [ConfigModule],
+      useFactory: (config: ConfigService) => ({
+        secret: config.get<string>('JWT_SECRET'),
+      }),
+      inject: [ConfigService],
     }),
     HttpModule,
     ClientsModule.register([
