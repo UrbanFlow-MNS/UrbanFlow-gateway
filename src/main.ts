@@ -8,4 +8,5 @@ async function bootstrap() {
   app.useGlobalFilters(new GlobalGatewayExceptionFilter());
   await app.listen(process.env.API_PORT ?? 3000);
 }
+
 bootstrap();
