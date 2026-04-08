@@ -10,7 +10,6 @@ export class SiteController {
 
     @Post()
     create(@Body() body: any): Observable<any> {
-        console.log("Received create site request with data (gateway):", body);
         return this.sitesClient.send({ cmd: 'site.create' }, body);
     }
 
