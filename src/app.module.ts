@@ -20,7 +20,7 @@ import { UserController } from './controllers/user.controller';
 import { JwtAuthGuard } from './guards/jwt.guard';
 import { TripHttpService } from './services/httpservice.service';
 import { PrometheusService } from './services/prometheus.service';
-import { TripPlannerHttpService } from './services/tripPlanerHttp.service';
+import { TripPlannerHttpService } from './services/tripPlannerHttp.service';
 
 @Module({
   imports: [
