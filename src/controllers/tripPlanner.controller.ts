@@ -26,7 +26,7 @@ export class TripPlannerController {
       departureTimeSeconds,
     };
 
-    return this.tripPlanner.get('/api/Trip/GetFastest', params);
+    return this.tripPlanner.get('/api/pathfinder/fastest', params);
   }
 
 }
