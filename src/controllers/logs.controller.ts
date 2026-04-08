@@ -21,10 +21,9 @@ export class LogsController {
         @Query('startDate') startDate?: string,
         @Query('endDate') endDate?: string
     ): Observable<LogBody[]> {
-        // On utilise .send() pour le pattern Request-Response
         return this.logsClient.send(
             { cmd: LogEventType.LOGS_GET_FILTERS },
-            { numberOfElement, startingElement, codeOfEvent, microserviceName, startDate, endDate }
+            { numberOfElement: numberOfElement, startingElement: startingElement, codeOfEvent: codeOfEvent, microserviceName: microserviceName, startDate: startDate, endDate: endDate }
         );
     }
 
