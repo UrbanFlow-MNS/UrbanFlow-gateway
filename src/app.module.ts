@@ -21,6 +21,9 @@ import { JwtAuthGuard } from './guards/jwt.guard';
 import { TripHttpService } from './services/httpservice.service';
 import { PrometheusService } from './services/prometheus.service';
 import { TripPlannerHttpService } from './services/tripPlannerHttp.service';
+import { InterventionController } from './controllers/intervention.controller'; 
+import { SiteController } from './controllers/site.controller'; 
+import { CategoryController } from './controllers/category.controller';
 
 @Module({
   imports: [
@@ -82,7 +85,10 @@ import { TripPlannerHttpService } from './services/tripPlannerHttp.service';
     AuthController,
     UserController,
     PrometheusController,
+    InterventionController,
     IncidentController,
+    SiteController,
+    CategoryController,
     LogsController,
     AgencyController,
     CalendarController,
