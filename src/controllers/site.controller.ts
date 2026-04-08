@@ -3,34 +3,34 @@ import { ClientProxy } from "@nestjs/microservices";
 import { Observable } from "rxjs";
 import { JwtAuthGuard } from "../guards/jwt.guard";
 
-@Controller('interventions')
+@Controller('sites')
 @UseGuards(JwtAuthGuard)
-export class InterventionController {
-    constructor(@Inject('INCIDENTS_SERVICE') private readonly interventionsClient: ClientProxy) {}
+export class SiteController {
+    constructor(@Inject('INCIDENTS_SERVICE') private readonly sitesClient: ClientProxy) {}
 
     @Post()
     create(@Body() body: any): Observable<any> {
-        return this.interventionsClient.send({ cmd: 'intervention.create' }, body);
+        console.log("Received create site request with data (gateway):", body);
+        return this.sitesClient.send({ cmd: 'site.create' }, body);
     }
 
     @Get()
     findAll(): Observable<any> {
-        return this.interventionsClient.send({ cmd: 'intervention.findAll' }, {});
+        return this.sitesClient.send({ cmd: 'site.findAll' }, {});
     }
 
     @Get(':id')
     findOne(@Param('id', ParseIntPipe) id: number): Observable<any> {
-        return this.interventionsClient.send({ cmd: 'intervention.findOne' }, id);
+        return this.sitesClient.send({ cmd: 'site.findOne' }, id);
     }
 
     @Patch(':id')
     update(@Param('id', ParseIntPipe) id: number, @Body() body: any): Observable<any> {
-        return this.interventionsClient.send({ cmd: 'intervention.update' }, { id, dto: body });
+        return this.sitesClient.send({ cmd: 'site.update' }, { id, dto: body });
     }
 
     @Delete(':id')
     remove(@Param('id', ParseIntPipe) id: number): Observable<any> {
-        return this.interventionsClient.send({ cmd: 'intervention.remove' }, id);
+        return this.sitesClient.send({ cmd: 'site.remove' }, id);
     }
 }
-
