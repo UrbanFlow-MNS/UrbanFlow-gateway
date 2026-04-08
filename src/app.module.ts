@@ -60,13 +60,10 @@ import { PrometheusService } from './services/prometheus.service';
       },
       {
         name: 'LOGS_SERVICE',
-        transport: Transport.RMQ,
+        transport: Transport.TCP,
         options: {
-          urls: [process.env.RABBIT_MQ || 'amqp://localhost:5672'],
-          queue: 'LOGS_QUEUE',
-          queueOptions: {
-            durable: false,
-          },
+          host: process.env.LOGS_SERVICE_HOST || 'localhost',
+          port: Number.parseInt(process.env.LOGS_SERVICE_PORT || '6002'),
         },
       },
       {

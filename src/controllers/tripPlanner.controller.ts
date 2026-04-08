@@ -1,12 +1,12 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards } from '@nestjs/common';
 import { Observable } from 'rxjs';
-import { TripHttpService } from '../services/httpservice.service';
+import { TripPlannerHttpService } from '../services/tripPlanerHttp.service';
 import { JwtAuthGuard } from '../guards/jwt.guard';
 
 @UseGuards(JwtAuthGuard)
 @Controller('trip-planner')
 export class TripPlannerController {
-  constructor(private readonly tripPlanner: TripHttpService) {}
+  constructor(private readonly tripPlanner: TripPlannerHttpService) {}
 
   @Get('fastest')
   getFastest(
