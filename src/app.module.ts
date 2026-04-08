@@ -20,6 +20,7 @@ import { UserController } from './controllers/user.controller';
 import { JwtAuthGuard } from './guards/jwt.guard';
 import { TripHttpService } from './services/httpservice.service';
 import { PrometheusService } from './services/prometheus.service';
+import { TripPlannerHttpService } from './services/tripPlanerHttp.service';
 
 @Module({
   imports: [
@@ -96,6 +97,7 @@ import { PrometheusService } from './services/prometheus.service';
     JwtAuthGuard,
     PrometheusService,
     TripHttpService,
+    TripPlannerHttpService,
     { provide: 'IPrometheusService', useClass: PrometheusService },
   ],
 })
