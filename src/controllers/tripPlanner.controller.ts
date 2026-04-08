@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards } from '@nestjs/common';
 import { Observable } from 'rxjs';
-import { TripPlannerHttpService } from '../services/tripPlanerHttp.service';
+import { TripPlannerHttpService } from '../services/tripPlannerHttp.service';
 import { JwtAuthGuard } from '../guards/jwt.guard';
 
 @UseGuards(JwtAuthGuard)
