@@ -10,7 +10,6 @@ export class IncidentController {
 
     @Post()
     create(@Body() body: any): Observable<any> {
-        console.log("Received create incident request with data (gateway):", body);
         return this.incidentsClient.send({ cmd: 'incident.create' }, body);
     }
 
