@@ -28,7 +28,7 @@ export class TripPlannerController {
     };
 
     try {
-      return this.tripPlanner.get('/api/pathfinder/fastest', { params });
+      return this.tripPlanner.get('/api/pathfinder/fastest', params);
     } catch (error) {
       console.log("error", error);
     }
