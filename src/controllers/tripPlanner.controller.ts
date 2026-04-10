@@ -2,6 +2,7 @@ import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards } fro
 import { Observable } from 'rxjs';
 import { TripPlannerHttpService } from '../services/tripPlannerHttp.service';
 import { JwtAuthGuard } from '../guards/jwt.guard';
+import { map } from 'rxjs/operators';
 
 @UseGuards(JwtAuthGuard)
 @Controller('trip-planner')
@@ -26,7 +27,6 @@ export class TripPlannerController {
       departureTimeSeconds,
     };
 
-    return this.tripPlanner.get('/api/pathfinder/fastest', params);
+      return this.tripPlanner.get('/api/pathfinder/fastest', params);
   }
-
 }
