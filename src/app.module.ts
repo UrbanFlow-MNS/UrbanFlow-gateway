@@ -24,6 +24,9 @@ import { TripPlannerHttpService } from './services/tripPlannerHttp.service';
 import { InterventionController } from './controllers/intervention.controller'; 
 import { SiteController } from './controllers/site.controller'; 
 import { CategoryController } from './controllers/category.controller';
+import { TmHttpService } from './services/tmHttp.service';
+import { RouteTypesController } from './controllers/routetype.controller';
+import { VehiclesController } from './controllers/vehicle.controller';
 
 @Module({
   imports: [
@@ -97,12 +100,15 @@ import { CategoryController } from './controllers/category.controller';
     StopsController,
     TripController,
     TripPlannerController,
+    RouteTypesController,
+    VehiclesController
   ],
   providers: [
     AppService,
     JwtAuthGuard,
     PrometheusService,
     TripHttpService,
+    TmHttpService,
     TripPlannerHttpService,
     { provide: 'IPrometheusService', useClass: PrometheusService },
   ],
