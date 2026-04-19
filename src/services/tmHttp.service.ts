@@ -5,7 +5,7 @@ import { map } from 'rxjs/operators';
 
 @Injectable()
 export class TmHttpService {
-    readonly baseUrl = `http://${process.env.TM_SERVICE_HOST || 'localhost'}:${process.env.TM_SERVICE_HTTP_PORT || '4009'}`;
+    readonly baseUrl = `http://${process.env.TM_SERVICE_HOST || 'tm-service'}:${process.env.TM_SERVICE_HTTP_PORT || '4009'}`;
 
     constructor(readonly http: HttpService) {}
 
