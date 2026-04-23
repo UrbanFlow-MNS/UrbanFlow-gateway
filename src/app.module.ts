@@ -29,6 +29,7 @@ import { TripHttpService } from './services/httpservice.service';
 import { PrometheusService } from './services/prometheus.service';
 import { TmHttpService } from './services/tmHttp.service';
 import { TripPlannerHttpService } from './services/tripPlannerHttp.service';
+import { MonitoringController } from './controllers/monitoring.controller';
 
 @Module({
     imports: [
@@ -96,6 +97,7 @@ import { TripPlannerHttpService } from './services/tripPlannerHttp.service';
         SiteController,
         CategoryController,
         LogsController,
+        MonitoringController,
         AgencyController,
         CalendarController,
         RoutesController,

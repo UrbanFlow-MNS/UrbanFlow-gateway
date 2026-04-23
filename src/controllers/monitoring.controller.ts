@@ -23,7 +23,7 @@ import { JwtAuthGuard } from '../guards/jwt.guard';
 
 @UseGuards(JwtAuthGuard)
 @Controller('monitoring')
-export class MonitoringGatewayController {
+export class MonitoringController {
   constructor(
     @Inject('MONITORING_SERVICE') private readonly client: ClientProxy,
   ) {}
