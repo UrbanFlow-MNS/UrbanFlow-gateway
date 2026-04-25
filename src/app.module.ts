@@ -6,7 +6,6 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AdminUserCityController } from './controllers/admin-user-city.controller';
-import { AgencyController } from './controllers/agency.controller';
 import { AuthController } from './controllers/auth.controller';
 import { CalendarController } from './controllers/calendar.controller';
 import { CategoryController } from './controllers/category.controller';
@@ -16,7 +15,6 @@ import { LogsController } from './controllers/logs.controller';
 import { PrometheusController } from './controllers/prometheus.controller';
 import { RoutesController } from './controllers/routes.controller';
 import { RouteTypesController } from './controllers/routetype.controller';
-import { RouteTypeController } from './controllers/routetypes.controller';
 import { SiteController } from './controllers/site.controller';
 import { StopsController } from './controllers/stops.controller';
 import { TripController } from './controllers/trip.controller';
@@ -98,10 +96,8 @@ import { MonitoringController } from './controllers/monitoring.controller';
         CategoryController,
         LogsController,
         MonitoringController,
-        AgencyController,
         CalendarController,
         RoutesController,
-        RouteTypeController,
         StopsController,
         TripController,
         TripPlannerController,
