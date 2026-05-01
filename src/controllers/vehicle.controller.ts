@@ -1,5 +1,4 @@
-// vehicles.controller.ts
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Query } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { TmHttpService } from '../services/tmHttp.service';
 
@@ -16,5 +15,30 @@ export class VehiclesController {
     @Post()
     createVehicle(@Body() body: any): Observable<any> {
         return this.trips.post('/api/Vehicles', body);
+    }
+
+    @Get('status')
+    getVehicleStatus(): Observable<any> {
+        return this.trips.get('/api/Vehicles/status');
+    }
+
+    @Put(':vehicleId') 
+    updateVehicle(@Body() body: any, @Param('vehicleId') vehicleId: string): Observable<any> {
+        return this.trips.put(`/api/Vehicles/${vehicleId}`, body);
+    }
+
+    @Patch('status/:vehicleId')
+    updateVehicleStatus(@Body() body: any, @Param('vehicleId') vehicleId: string): Observable<any> {
+        return this.trips.patch(`/api/Vehicles/status/${vehicleId}`, body);
+    }
+
+    @Delete(':vehicleId') 
+    deleteVehicle(@Param('vehicleId') vehicleId: string): Observable<any> {
+        return this.trips.delete(`/api/Vehicles/${vehicleId}`);
+    }
+
+    @Get('vehicles/:agencyId') 
+    getVehiclesByAgency(@Param('agencyId') agencyId: string): Observable<any> {
+        return this.trips.get(`/api/Vehicles/vehicles/${agencyId}`);
     }
 }

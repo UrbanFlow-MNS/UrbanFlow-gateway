@@ -11,10 +11,10 @@ export class RoutesController {
         return this.trips.post('/api/Routes/create', body);
     }
 
-    @Get('filter')
+    @Get()
     filterRoutes(@Query() query: any): Observable<any> {
         const params = new URLSearchParams(query).toString();
-        return this.trips.get(`/api/Routes/filter?${params}`);
+        return this.trips.get(`/api/Routes?${params}`); 
     }
 
     @Get('all')

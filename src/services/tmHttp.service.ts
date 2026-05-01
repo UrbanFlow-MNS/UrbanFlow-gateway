@@ -32,4 +32,10 @@ export class TmHttpService {
           .delete<T>(`${this.baseUrl}${path}`)
           .pipe(map((r) => r.data));
     }
+
+    patch<T>(path: string, body: any): Observable<T> {
+    return this.http
+      .patch<T>(`${this.baseUrl}${path}`, body)
+      .pipe(map((r) => r.data));
+    }
 }
