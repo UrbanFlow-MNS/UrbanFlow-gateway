@@ -5,19 +5,41 @@ import { GlobalGatewayExceptionFilter } from './exception.filter';
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
 
-    const allowedOrigins = process.env.CORS_ORIGINS?.split(',') ?? [];
+    const allowedOrigins =
+        process.env.CORS_ORIGINS?.split(',')
+            .map((s) => s.trim())
+            .filter(Boolean) ?? [];
+    const isDev = process.env.NODE_ENV !== 'production';
+    const localhostPatterns = [
+        /^https?:\/\/localhost(:\d+)?$/,
+        /^https?:\/\/127\.0\.0\.1(:\d+)?$/,
+    ];
+    const compiledOrigins = allowedOrigins.map((entry) => {
+        if (entry.includes('*')) {
+            const escaped = entry.replace(/[.+?^${}()|[\]\\]/g, '\\$&').replace(/\*/g, '[^.]+');
+            return new RegExp(`^${escaped}$`);
+        }
+        return entry;
+    });
 
     app.enableCors({
         origin: (origin, callback) => {
-            // En prod : uniquement les origines listées dans CORS_ORIGINS
-            // En dev : tout localhost est autorisé
-            const isLocalhost = !origin || /^http:\/\/localhost:\d+$/.test(origin);
-            const isAllowed = allowedOrigins.includes(origin ?? '');
-            if (isLocalhost || isAllowed) {
+            if (!origin) {
                 callback(null, true);
-            } else {
-                callback(new Error(`Origin ${origin} not allowed by CORS`));
+                return;
             }
+            if (isDev && localhostPatterns.some((re) => re.test(origin))) {
+                callback(null, true);
+                return;
+            }
+            const allowed = compiledOrigins.some((entry) =>
+                entry instanceof RegExp ? entry.test(origin) : entry === origin,
+            );
+            if (allowed) {
+                callback(null, true);
+                return;
+            }
+            callback(new Error(`Origin ${origin} not allowed by CORS`));
         },
         credentials: true,
     });
