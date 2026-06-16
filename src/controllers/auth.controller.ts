@@ -8,6 +8,7 @@ export class AuthController {
 
     @Post('signUp')
     signUp(@Body() body: any): Observable<any> {
+        console.log("AUTH CONTROLLEZR GATEWAY SENT")
         return this.authClient.send({ cmd: 'auth.signUp' }, body)
     }
 
