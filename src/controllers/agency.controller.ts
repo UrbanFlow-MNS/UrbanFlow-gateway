@@ -15,7 +15,7 @@ export class AgencyController {
 
     @Post()
     create(@Body() body: any, @Req() req: Request): Observable<any> {
-        const { sub: callerId } = req['user'];
+        const { id: callerId } = req['user'];
         return this.userClient.send({ cmd: 'agency.create' }, { city: body.city, callerId });
     }
 
