@@ -6,6 +6,7 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AdminUserCityController } from './controllers/admin-user-city.controller';
+import { AgencyController } from './controllers/agency.controller';
 import { AuthController } from './controllers/auth.controller';
 import { CalendarController } from './controllers/calendar.controller';
 import { CategoryController } from './controllers/category.controller';
@@ -89,6 +90,7 @@ import { MonitoringController } from './controllers/monitoring.controller';
         AuthController,
         UserController,
         AdminUserCityController,
+        AgencyController,
         PrometheusController,
         InterventionController,
         IncidentController,
