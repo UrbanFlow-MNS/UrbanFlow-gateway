@@ -11,6 +11,7 @@ async function bootstrap() {
             'http://localhost:5174',
             'https://urbanflow.lazyy.fr',
             'https://auth.urbanflow.lazyy.fr',
+            'https://monitoring.urbanflow.lazyy.fr',
         ].filter(Boolean),
         methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
         credentials: true,
