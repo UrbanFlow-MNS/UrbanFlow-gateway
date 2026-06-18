@@ -9,6 +9,7 @@ async function bootstrap() {
         origin: [
             'http://localhost:5173',
             'http://localhost:5174',
+            'http://localhost:10005',
             'https://urbanflow.lazyy.fr',
             'https://auth.urbanflow.lazyy.fr',
             'https://monitoring.urbanflow.lazyy.fr',
