@@ -20,12 +20,14 @@ import {
   ServerDatastampBody,
 } from '@bato-urbanflow/urbanflow-models';
 import { JwtAuthGuard } from '../guards/jwt.guard';
+import { PrometheusProxyService } from '../services/prometheusProxy.service';
 
 @UseGuards(JwtAuthGuard)
 @Controller('monitoring')
 export class MonitoringController {
   constructor(
     @Inject('MONITORING_SERVICE') private readonly client: ClientProxy,
+    private readonly prometheusProxyService: PrometheusProxyService,
   ) {}
 
   // --- SECTION : DATA LOGS ---
@@ -111,5 +113,26 @@ export class MonitoringController {
         return res.send(metrics);
       }),
     );
+  }
+
+  // --- SECTION : PROMETHEUS (QUERY PROXY) ---
+  @Get('prometheus/api/v1/query')
+  queryPrometheus(@Query('query') query: string) {
+    return this.prometheusProxyService.query(query);
+  }
+
+  @Get('prometheus/api/v1/query_range')
+  queryRangePrometheus(
+    @Query('query') query: string,
+    @Query('start') start: string,
+    @Query('end') end: string,
+    @Query('step') step: string,
+  ) {
+    return this.prometheusProxyService.queryRange(query, start, end, step);
+  }
+
+  @Get('prometheus/api/v1/targets')
+  targetsPrometheus() {
+    return this.prometheusProxyService.targets();
   }
 }
