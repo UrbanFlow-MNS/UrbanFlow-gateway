@@ -10,6 +10,7 @@ async function bootstrap() {
             'http://localhost:5173',
             'http://localhost:5174',
             'http://localhost:10005',
+            'http://localhost:10000',
             'https://urbanflow.lazyy.fr',
             'https://auth.urbanflow.lazyy.fr',
             'https://monitoring.urbanflow.lazyy.fr',
