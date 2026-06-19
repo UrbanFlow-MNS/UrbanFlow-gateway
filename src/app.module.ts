@@ -14,6 +14,7 @@ import { IncidentController } from './controllers/incident.controller';
 import { InterventionController } from './controllers/intervention.controller';
 import { LogsController } from './controllers/logs.controller';
 import { PrometheusController } from './controllers/prometheus.controller';
+import { PrometheusProxyController } from './controllers/prometheusProxy.controller';
 import { RoutesController } from './controllers/routes.controller';
 import { RouteTypesController } from './controllers/routetype.controller';
 import { SiteController } from './controllers/site.controller';
@@ -26,6 +27,7 @@ import { JwtAuthGuard } from './guards/jwt.guard';
 import { RolesGuard } from './guards/roles.guard';
 import { TripHttpService } from './services/httpservice.service';
 import { PrometheusService } from './services/prometheus.service';
+import { PrometheusProxyService } from './services/prometheusProxy.service';
 import { TmHttpService } from './services/tmHttp.service';
 import { TripPlannerHttpService } from './services/tripPlannerHttp.service';
 import { MonitoringController } from './controllers/monitoring.controller';
@@ -92,6 +94,7 @@ import { MonitoringController } from './controllers/monitoring.controller';
         AdminUserCityController,
         AgencyController,
         PrometheusController,
+        PrometheusProxyController,
         InterventionController,
         IncidentController,
         SiteController,
@@ -111,6 +114,7 @@ import { MonitoringController } from './controllers/monitoring.controller';
         JwtAuthGuard,
         RolesGuard,
         PrometheusService,
+        PrometheusProxyService,
         TripHttpService,
         TmHttpService,
         TripPlannerHttpService,

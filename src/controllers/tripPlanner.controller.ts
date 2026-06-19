@@ -11,7 +11,6 @@ export class TripPlannerController {
 
   @Get('fastest')
   getFastest(
-    @Query('agencyId') agencyId: number,
     @Query('startLat') startLat: number,
     @Query('startLong') startLong: number,
     @Query('endLat') endLat: number,
@@ -19,7 +18,6 @@ export class TripPlannerController {
     @Query('departureTimeSeconds') departureTimeSeconds: number,
   ): Observable<any> {
     const params = {
-      agencyId,
       startLat,
       startLong,
       endLat,
