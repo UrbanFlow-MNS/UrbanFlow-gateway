@@ -1,9 +1,7 @@
-import { ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpStatus, Logger } from '@nestjs/common';
+import { ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpStatus } from '@nestjs/common';
 
 @Catch()
 export class GlobalGatewayExceptionFilter implements ExceptionFilter {
-  private readonly logger = new Logger('ExceptionFilter');
-
   catch(exception: unknown, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse();
@@ -24,7 +22,7 @@ export class GlobalGatewayExceptionFilter implements ExceptionFilter {
     }
 
     if (status === HttpStatus.INTERNAL_SERVER_ERROR) {
-      this.logger.error(`${request.method} ${request.url} -> 500`, (exception as Error)?.stack ?? exception);
+      console.error(`[ExceptionFilter] ${request.method} ${request.url} -> 500`, (exception as Error)?.stack ?? exception);
     }
 
     return response.status(status).json({
