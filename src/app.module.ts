@@ -5,9 +5,8 @@ import { JwtModule } from '@nestjs/jwt';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { AdminUserCityController } from './controllers/admin-user-city.controller';
+import { AdminUserCityController } from './user/admin-user-city.controller';
 import { AgencyController } from './controllers/agency.controller';
-import { AuthController } from './controllers/auth.controller';
 import { CalendarController } from './controllers/calendar.controller';
 import { CategoryController } from './controllers/category.controller';
 import { IncidentController } from './controllers/incident.controller';
@@ -21,7 +20,6 @@ import { SiteController } from './controllers/site.controller';
 import { StopsController } from './controllers/stops.controller';
 import { TripController } from './controllers/trip.controller';
 import { TripPlannerController } from './controllers/tripPlanner.controller';
-import { UserController } from './controllers/user.controller';
 import { VehiclesController } from './controllers/vehicle.controller';
 import { JwtAuthGuard } from './guards/jwt.guard';
 import { RolesGuard } from './guards/roles.guard';
@@ -31,6 +29,9 @@ import { PrometheusProxyService } from './services/prometheusProxy.service';
 import { TmHttpService } from './services/tmHttp.service';
 import { TripPlannerHttpService } from './services/tripPlannerHttp.service';
 import { MonitoringController } from './controllers/monitoring.controller';
+import { AuthModule } from './auth/auth.module';
+import { UserModule } from './user/user.module';
+import { AgencyGrpcModule } from '../../shared/nestjs/user/agency-grpc.module';
 
 @Module({
     imports: [
@@ -44,23 +45,10 @@ import { MonitoringController } from './controllers/monitoring.controller';
             inject: [ConfigService],
         }),
         HttpModule,
+        AuthModule,
+        UserModule,
+        AgencyGrpcModule,
         ClientsModule.register([
-            {
-                name: 'AUTH_SERVICE',
-                transport: Transport.TCP,
-                options: {
-                    host: process.env.AUTH_SERVICE_HOST || 'localhost',
-                    port: Number.parseInt(process.env.AUTH_SERVICE_PORT || '4001'),
-                },
-            },
-            {
-                name: 'USER_SERVICE',
-                transport: Transport.TCP,
-                options: {
-                    host: process.env.USER_SERVICE_HOST || 'localhost',
-                    port: Number.parseInt(process.env.USER_SERVICE_PORT || '4001'),
-                },
-            },
             {
                 name: 'INCIDENTS_SERVICE',
                 transport: Transport.TCP,
@@ -89,9 +77,6 @@ import { MonitoringController } from './controllers/monitoring.controller';
     ],
     controllers: [
         AppController,
-        AuthController,
-        UserController,
-        AdminUserCityController,
         AgencyController,
         PrometheusController,
         PrometheusProxyController,

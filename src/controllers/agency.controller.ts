@@ -1,53 +1,67 @@
-import { Body, Controller, Delete, Get, Inject, Param, ParseIntPipe, Post, Req, UseGuards } from '@nestjs/common';
-import { ClientProxy } from '@nestjs/microservices';
+import { Body, Controller, Delete, Get, Inject, NotFoundException, OnModuleInit, Param, ParseIntPipe, Post, Req, UseGuards } from '@nestjs/common';
+import { ClientGrpc } from '@nestjs/microservices';
 import { Request } from 'express';
-import { Observable } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 import { Roles } from '../decorators/roles.decorator';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 import { RolesGuard } from '../guards/roles.guard';
+import { AgencyServiceClient } from '../../../proto/generated/typescript/user';
+
+const AGENCY_SERVICE_NAME = 'AgencyService';
 
 @UseGuards(JwtAuthGuard)
 @Controller('agency')
-export class AgencyController {
+export class AgencyController implements OnModuleInit {
+    private agencyService!: AgencyServiceClient;
 
-    constructor(@Inject('USER_SERVICE') private userClient: ClientProxy) { }
+    constructor(@Inject('AGENCY_PACKAGE') private readonly agencyClient: ClientGrpc) { }
+
+    onModuleInit() {
+        this.agencyService = this.agencyClient.getService<AgencyServiceClient>(AGENCY_SERVICE_NAME);
+    }
 
     @Get()
-    findAll(): Observable<any> {
-        return this.userClient.send({ cmd: 'agency.findAll' }, {});
+    async findAll() {
+        const res = await firstValueFrom(this.agencyService.findAll({}));
+        return res.agencies ?? [];
     }
 
     @Get(':id')
-    findOne(@Param('id', ParseIntPipe) id: number): Observable<any> {
-        return this.userClient.send({ cmd: 'agency.findOne' }, { id });
+    async findOne(@Param('id', ParseIntPipe) id: number) {
+        const res = await firstValueFrom(this.agencyService.findOne({ id }));
+        if (!res.agency) throw new NotFoundException('Agency not found');
+        return res.agency;
     }
 
     @UseGuards(RolesGuard)
     @Roles('SUPERADMIN')
     @Post()
-    create(@Body() body: any, @Req() req: Request): Observable<any> {
+    async create(@Body() body: any, @Req() req: Request) {
         const { id: callerId } = req['user'];
-        return this.userClient.send({ cmd: 'agency.create' }, { city: body.city, callerId });
+        return await firstValueFrom(this.agencyService.create({ city: body.city, callerId }));
     }
 
     @UseGuards(RolesGuard)
-    @Roles('SUPERADMIN')
+    @Roles('SUPERADMIN', 'ADMIN_USER_CITY')
     @Post(':id/users')
-    addUser(@Param('id', ParseIntPipe) id: number, @Body() body: any): Observable<any> {
-        return this.userClient.send({ cmd: 'agency.addUser' }, { agencyId: id, userId: body.userId });
+    async addUser(@Param('id', ParseIntPipe) id: number, @Body() body: any) {
+        await firstValueFrom(this.agencyService.addUser({ agencyId: id, userId: body.userId }));
+        return { message: 'User added to agency' };
     }
 
     @UseGuards(RolesGuard)
     @Roles('SUPERADMIN')
     @Delete(':id/users/:userId')
-    removeUser(@Param('id', ParseIntPipe) id: number, @Param('userId', ParseIntPipe) userId: number): Observable<any> {
-        return this.userClient.send({ cmd: 'agency.removeUser' }, { agencyId: id, userId });
+    async removeUser(@Param('id', ParseIntPipe) id: number, @Param('userId', ParseIntPipe) userId: number) {
+        await firstValueFrom(this.agencyService.removeUser({ agencyId: id, userId }));
+        return { message: 'User removed from agency' };
     }
 
     @UseGuards(RolesGuard)
     @Roles('SUPERADMIN')
     @Delete(':id')
-    delete(@Param('id', ParseIntPipe) id: number): Observable<any> {
-        return this.userClient.send({ cmd: 'agency.delete' }, { id });
+    async delete(@Param('id', ParseIntPipe) id: number) {
+        await firstValueFrom(this.agencyService.delete({ id }));
+        return { message: 'Agency deleted successfully' };
     }
 }
