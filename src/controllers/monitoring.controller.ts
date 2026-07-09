@@ -19,7 +19,7 @@ import {
   MicroserviceBody,
   ServerDatastampBody,
 } from '@bato-urbanflow/urbanflow-models';
-import { JwtAuthGuard } from '../guards/jwt-auth.guard';
+import { JwtAuthGuard } from '../guards/jwt.guard';
 import { RolesGuard } from '../guards/roles.guard';
 import { Roles } from '../decorators/roles.decorator';
 import { PrometheusProxyService } from '../services/prometheusProxy.service';

@@ -3,7 +3,7 @@ import { ClientGrpc } from '@nestjs/microservices';
 import { Request } from 'express';
 import { firstValueFrom } from 'rxjs';
 import { Roles } from '../decorators/roles.decorator';
-import { JwtAuthGuard } from '../guards/jwt-auth.guard';
+import { JwtAuthGuard } from '../guards/jwt.guard';
 import { RolesGuard } from '../guards/roles.guard';
 import { AgencyServiceClient } from '../../../proto/generated/typescript/user';
 

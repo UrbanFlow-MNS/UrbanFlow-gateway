@@ -4,6 +4,7 @@ import { Request } from 'express';
 
 export interface JwtPayload {
     sub: number;
+    role: string;
     iat?: number;
     exp?: number;
 }
@@ -24,6 +25,7 @@ export class JwtAuthGuard implements CanActivate {
         try {
             const payload = await this.jwtService.verifyAsync<JwtPayload>(token, {
                 secret: process.env.JWT_SECRET,
+                algorithms: ['HS256'],
             });
             request['user'] = payload;
         } catch {
