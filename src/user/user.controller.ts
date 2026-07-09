@@ -17,9 +17,18 @@ export class UserController implements OnModuleInit {
 
     @UseGuards(JwtAuthGuard)
     @Get('info/:id')
-    async getUserInfo(@Param('id', ParseIntPipe) id: number) {
+    async getUserInfo(
+        @Param('id', ParseIntPipe) id: number,
+        @CurrentUser() user: JwtPayload,
+    ) {
+        const isAdmin = ['SUPERADMIN', 'ADMIN_USER_CITY'].includes(user.role);
+        if (user.sub !== id && !isAdmin) {
+            throw new ForbiddenException('You can only view your own info');
+        }
         const res = await firstValueFrom(this.userService.findOneById({ id }));
-        return res.user ?? null;
+        if (!res.user) return null;
+        const { refreshToken, ...safe } = res.user;
+        return safe;
     }
 
     @UseGuards(JwtAuthGuard)
