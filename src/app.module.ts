@@ -1,8 +1,10 @@
 import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { APP_GUARD } from '@nestjs/core';
 import { JwtModule } from '@nestjs/jwt';
 import { ClientsModule, Transport } from '@nestjs/microservices';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AdminUserCityController } from './user/admin-user-city.controller';
@@ -36,6 +38,11 @@ import { AgencyGrpcModule } from '../../shared/nestjs/user/agency-grpc.module';
 @Module({
     imports: [
         ConfigModule.forRoot({ isGlobal: true }),
+        ThrottlerModule.forRoot([
+            { name: 'short', ttl: 1000, limit: 20 },
+            { name: 'medium', ttl: 10000, limit: 100 },
+            { name: 'long', ttl: 60000, limit: 500 },
+        ]),
         JwtModule.registerAsync({
             global: true,
             imports: [ConfigModule],
@@ -104,6 +111,7 @@ import { AgencyGrpcModule } from '../../shared/nestjs/user/agency-grpc.module';
         TmHttpService,
         TripPlannerHttpService,
         { provide: 'IPrometheusService', useClass: PrometheusService },
+        { provide: APP_GUARD, useClass: ThrottlerGuard },
     ],
 })
 export class AppModule {}
