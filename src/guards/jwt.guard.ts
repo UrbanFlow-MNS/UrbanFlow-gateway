@@ -5,6 +5,7 @@ import { Request } from 'express';
 export interface JwtPayload {
     sub: number;
     role: string;
+    typ?: string;
     iat?: number;
     exp?: number;
 }
@@ -27,6 +28,9 @@ export class JwtAuthGuard implements CanActivate {
                 secret: process.env.JWT_SECRET,
                 algorithms: ['HS256'],
             });
+            if (payload.typ !== 'access') {
+                throw new UnauthorizedException('Wrong token type');
+            }
             request['user'] = payload;
         } catch {
             throw new UnauthorizedException('Invalid or expired token');
