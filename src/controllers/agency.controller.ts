@@ -1,13 +1,25 @@
 import { Body, Controller, Delete, Get, Inject, NotFoundException, OnModuleInit, Param, ParseIntPipe, Post, Req, UseGuards } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
+import { Metadata } from '@grpc/grpc-js';
 import { Request } from 'express';
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, Observable } from 'rxjs';
 import { Roles } from '../decorators/roles.decorator';
 import { JwtAuthGuard } from '../guards/jwt.guard';
 import { RolesGuard } from '../guards/roles.guard';
 import { AgencyServiceClient } from '../../../proto/generated/typescript/user';
 
 const AGENCY_SERVICE_NAME = 'AgencyService';
+
+function userMeta(): Metadata {
+    const meta = new Metadata();
+    meta.add('x-internal-secret', process.env.USER_INTERNAL_SECRET ?? '');
+    return meta;
+}
+
+function call<T>(client: AgencyServiceClient, method: keyof AgencyServiceClient, request: unknown): Observable<T> {
+    const fn = client[method] as unknown as (req: unknown, meta: Metadata) => Observable<T>;
+    return fn.call(client, request, userMeta());
+}
 
 @UseGuards(JwtAuthGuard)
 @Controller('agency')
@@ -22,13 +34,13 @@ export class AgencyController implements OnModuleInit {
 
     @Get()
     async findAll() {
-        const res = await firstValueFrom(this.agencyService.findAll({}));
+        const res = await firstValueFrom(call<{ agencies?: any[] }>(this.agencyService, 'findAll', {}));
         return res.agencies ?? [];
     }
 
     @Get(':id')
     async findOne(@Param('id', ParseIntPipe) id: number) {
-        const res = await firstValueFrom(this.agencyService.findOne({ id }));
+        const res = await firstValueFrom(call<{ agency?: any }>(this.agencyService, 'findOne', { id }));
         if (!res.agency) throw new NotFoundException('Agency not found');
         return res.agency;
     }
@@ -38,14 +50,14 @@ export class AgencyController implements OnModuleInit {
     @Post()
     async create(@Body() body: any, @Req() req: Request) {
         const { id: callerId } = req['user'];
-        return await firstValueFrom(this.agencyService.create({ city: body.city, callerId }));
+        return await firstValueFrom(call(this.agencyService, 'create', { city: body.city, callerId }));
     }
 
     @UseGuards(RolesGuard)
     @Roles('SUPERADMIN', 'ADMIN_USER_CITY')
     @Post(':id/users')
     async addUser(@Param('id', ParseIntPipe) id: number, @Body() body: any) {
-        await firstValueFrom(this.agencyService.addUser({ agencyId: id, userId: body.userId }));
+        await firstValueFrom(call(this.agencyService, 'addUser', { agencyId: id, userId: body.userId }));
         return { message: 'User added to agency' };
     }
 
@@ -53,7 +65,7 @@ export class AgencyController implements OnModuleInit {
     @Roles('SUPERADMIN')
     @Delete(':id/users/:userId')
     async removeUser(@Param('id', ParseIntPipe) id: number, @Param('userId', ParseIntPipe) userId: number) {
-        await firstValueFrom(this.agencyService.removeUser({ agencyId: id, userId }));
+        await firstValueFrom(call(this.agencyService, 'removeUser', { agencyId: id, userId }));
         return { message: 'User removed from agency' };
     }
 
@@ -61,7 +73,7 @@ export class AgencyController implements OnModuleInit {
     @Roles('SUPERADMIN')
     @Delete(':id')
     async delete(@Param('id', ParseIntPipe) id: number) {
-        await firstValueFrom(this.agencyService.delete({ id }));
+        await firstValueFrom(call(this.agencyService, 'delete', { id }));
         return { message: 'Agency deleted successfully' };
     }
 }

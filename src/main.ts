@@ -8,6 +8,12 @@ async function bootstrap() {
     if (!authInternalSecret) {
         throw new Error("AUTH_INTERNAL_SECRET is not defined.");
     }
+
+    const userInternalSecret = process.env.USER_INTERNAL_SECRET;
+    if (!userInternalSecret) {
+        throw new Error("USER_INTERNAL_SECRET is not defined.");
+    }
+
     const app = await NestFactory.create(AppModule);
 
     app.use(helmet());
