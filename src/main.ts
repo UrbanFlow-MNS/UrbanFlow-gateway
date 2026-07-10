@@ -4,6 +4,10 @@ import { AppModule } from './app.module';
 import { GlobalGatewayExceptionFilter } from './exception.filter';
 
 async function bootstrap() {
+    const authInternalSecret = process.env.AUTH_INTERNAL_SECRET;
+    if (!authInternalSecret) {
+        throw new Error("AUTH_INTERNAL_SECRET is not defined.");
+    }
     const app = await NestFactory.create(AppModule);
 
     app.use(helmet());

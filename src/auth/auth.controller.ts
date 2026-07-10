@@ -3,6 +3,10 @@ import { ClientProxy } from "@nestjs/microservices";
 import { Throttle } from "@nestjs/throttler";
 import { Observable } from "rxjs";
 
+function wrap<T>(payload: T) {
+    return { __internalSecret: process.env.AUTH_INTERNAL_SECRET ?? "", payload };
+}
+
 @Controller('auth')
 export class AuthController {
     constructor(@Inject('AUTH_SERVICE') private readonly authClient: ClientProxy) { }
@@ -19,25 +23,25 @@ export class AuthController {
                 throw new ForbiddenException('Invalid or missing superadmin key');
             }
         }
-        return this.authClient.send({ cmd: 'auth.signUp' }, body)
+        return this.authClient.send({ cmd: 'auth.signUp' }, wrap(body))
     }
 
     @Throttle({ short: { limit: 5, ttl: 60000 } })
     @Post('signIn')
     signIn(@Body() body: any): Observable<any> {
-        return this.authClient.send({ cmd: 'auth.signIn' }, body)
+        return this.authClient.send({ cmd: 'auth.signIn' }, wrap(body))
     }
 
     @Throttle({ short: { limit: 10, ttl: 60000 } })
     @Get('refreshToken/:refreshToken')
     refreshToken(@Param('refreshToken') refreshToken: string): Observable<any> {
-        return this.authClient.send({ cmd: 'auth.refreshToken' }, refreshToken)
+        return this.authClient.send({ cmd: 'auth.refreshToken' }, wrap(refreshToken))
     }
 
     @Throttle({ short: { limit: 3, ttl: 300000 } })
     @Post('forgot-password/:email')
     forgotPassword(@Param('email') email: string): Observable<any> {
-        return this.authClient.send({ cmd: 'auth.forgotPassword' }, email)
+        return this.authClient.send({ cmd: 'auth.forgotPassword' }, wrap(email))
     }
 
 }
