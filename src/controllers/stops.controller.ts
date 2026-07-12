@@ -1,7 +1,9 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { TripHttpService } from '../services/httpservice.service';
+import { JwtAuthGuard } from '../guards/jwt.guard';
 
+@UseGuards(JwtAuthGuard)
 @Controller('stops')
 export class StopsController {
     constructor(private readonly trips: TripHttpService) {}
@@ -25,4 +27,8 @@ export class StopsController {
     deleteStop(@Param('id') id: string): Observable<any> {
         return this.trips.delete(`/api/Stops/delete/${id}`);
     }
+}
+
+function UseGuards(JwtAuthGuard: any): (target: typeof StopsController) => void | typeof StopsController {
+    throw new Error('Function not implemented.');
 }

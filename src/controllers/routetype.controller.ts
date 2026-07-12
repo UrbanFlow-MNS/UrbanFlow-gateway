@@ -1,8 +1,10 @@
 // routetype.controller.ts
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { TmHttpService } from '../services/tmHttp.service';
+import { JwtAuthGuard } from '../guards/jwt.guard';
 
+@UseGuards(JwtAuthGuard)
 @Controller('routetype')
 export class RouteTypesController {
     constructor(private readonly trips: TmHttpService) {}
