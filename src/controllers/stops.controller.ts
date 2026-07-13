@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { TripHttpService } from '../services/httpservice.service';
 import { JwtAuthGuard } from '../guards/jwt.guard';
