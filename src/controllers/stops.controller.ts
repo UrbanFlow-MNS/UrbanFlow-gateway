@@ -28,7 +28,3 @@ export class StopsController {
         return this.trips.delete(`/api/Stops/delete/${id}`);
     }
 }
-
-function UseGuards(JwtAuthGuard: any): (target: typeof StopsController) => void | typeof StopsController {
-    throw new Error('Function not implemented.');
-}
