@@ -1,14 +1,12 @@
-import { Body, Controller, Delete, Get, Inject, NotFoundException, OnModuleInit, Param, ParseIntPipe, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Inject, NotFoundException, OnModuleInit, Param, ParseIntPipe, Post, UseGuards } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
 import { Metadata } from '@grpc/grpc-js';
-import { Request } from 'express';
 import { firstValueFrom, Observable } from 'rxjs';
+import { CurrentUser } from '../decorators/current-user.decorator';
 import { Roles } from '../decorators/roles.decorator';
-import { JwtAuthGuard } from '../guards/jwt.guard';
+import { JwtAuthGuard, JwtPayload } from '../guards/jwt.guard';
 import { RolesGuard } from '../guards/roles.guard';
 import { AgencyServiceClient } from '../../../proto/generated/typescript/user';
-
-const AGENCY_SERVICE_NAME = 'AgencyService';
 
 function userMeta(): Metadata {
     const meta = new Metadata();
@@ -29,7 +27,7 @@ export class AgencyController implements OnModuleInit {
     constructor(@Inject('AGENCY_PACKAGE') private readonly agencyClient: ClientGrpc) { }
 
     onModuleInit() {
-        this.agencyService = this.agencyClient.getService<AgencyServiceClient>(AGENCY_SERVICE_NAME);
+        this.agencyService = this.agencyClient.getService<AgencyServiceClient>("AgencyService");
     }
 
     @Get()
@@ -48,9 +46,8 @@ export class AgencyController implements OnModuleInit {
     @UseGuards(RolesGuard)
     @Roles('SUPERADMIN')
     @Post()
-    async create(@Body() body: any, @Req() req: Request) {
-        const { id: callerId } = req['user'];
-        return await firstValueFrom(call(this.agencyService, 'create', { city: body.city, callerId }));
+    async create(@Body() body: any, @CurrentUser() user: JwtPayload) {
+        return await firstValueFrom(call(this.agencyService, 'create', { city: body.city, callerId: user.sub }));
     }
 
     @UseGuards(RolesGuard)
