@@ -44,6 +44,20 @@ export class AgencyController implements OnModuleInit {
     }
 
     @UseGuards(RolesGuard)
+    @Roles('SUPERADMIN', 'ADMIN_USER_CITY', 'ADMIN_TECHNICIAN')
+    @Get(':id/users')
+    async findUsers(@Param('id', ParseIntPipe) id: number) {
+        const res = await firstValueFrom(call<{ users?: any[] }>(this.agencyService, 'findUsers', { id }));
+        return (res.users ?? []).map(u => ({
+            id: u.id,
+            firstName: u.firstName,
+            lastName: u.lastName,
+            email: u.email,
+            role: u.role,
+        }));
+    }
+
+    @UseGuards(RolesGuard)
     @Roles('SUPERADMIN')
     @Post()
     async create(@Body() body: any, @CurrentUser() user: JwtPayload) {
