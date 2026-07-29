@@ -7,7 +7,6 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { AdminUserCityController } from './user/admin-user-city.controller';
 import { AgencyController } from './controllers/agency.controller';
 import { CalendarController } from './controllers/calendar.controller';
 import { CategoryController } from './controllers/category.controller';
