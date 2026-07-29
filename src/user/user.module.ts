@@ -1,16 +1,16 @@
 import { Module } from '@nestjs/common';
 import { UserController } from './user.controller';
-import { AdminUserCityController } from './admin-user-city.controller';
+import { AdminUserController } from './admin-user.controller';
 import { UserGrpcModule } from '../../../shared/nestjs/user/user-grpc.module';
-import { AdminUserCityGrpcModule } from '../../../shared/nestjs/user/admin-user-city-grpc.module';
+import { AdminUserGrpcModule } from '../../../shared/nestjs/user/admin-user-grpc.module';
 
 @Module({
     imports: [
         UserGrpcModule,
-        AdminUserCityGrpcModule,
+        AdminUserGrpcModule,
     ],
-    controllers: [UserController, AdminUserCityController],
-    exports: [UserGrpcModule, AdminUserCityGrpcModule],
+    controllers: [UserController, AdminUserController],
+    exports: [UserGrpcModule, AdminUserGrpcModule],
 })
 
 export class UserModule { }
