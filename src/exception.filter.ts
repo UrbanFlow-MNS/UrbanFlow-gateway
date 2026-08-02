@@ -34,10 +34,13 @@ export class GlobalGatewayExceptionFilter implements ExceptionFilter {
 }
 
 function isRpcError(exception: unknown): exception is { statusCode: number; message: string } {
-  return (
-    typeof exception === 'object' &&
-    exception !== null &&
-    'statusCode' in exception &&
-    'message' in exception
-  );
+  if (typeof exception !== 'object' || exception === null) return false;
+  const e = exception as Record<string, unknown>;
+  if ('statusCode' in e && 'message' in e) return true;
+  // HttpException sérialisée via TCP : a "status" au lieu de "statusCode"
+  if ('status' in e && typeof e['status'] === 'number' && 'message' in e) {
+    (e as any).statusCode = e['status'];
+    return true;
+  }
+  return false;
 }
