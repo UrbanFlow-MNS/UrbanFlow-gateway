@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, ForbiddenException, Get, Inject, OnModuleInit, Param, ParseIntPipe, Post, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, ForbiddenException, Get, Inject, NotFoundException, OnModuleInit, Param, ParseIntPipe, Post, UseGuards } from "@nestjs/common";
 import { ClientGrpc } from "@nestjs/microservices";
 import { Metadata } from "@grpc/grpc-js";
 import { firstValueFrom, Observable } from "rxjs";
@@ -25,6 +25,15 @@ export class UserController implements OnModuleInit {
 
     onModuleInit() {
         this.userService = this.userClient.getService<UserServiceClient>(USER_SERVICE_NAME);
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Get('me')
+    async getMe(@CurrentUser() user: JwtPayload) {
+        const res = await firstValueFrom(callUser<{ user?: any }>(this.userService, "findOneById", { id: user.sub }));
+        if (!res.user) throw new NotFoundException('User not found');
+        const { refreshToken, ...safe } = res.user;
+        return safe;
     }
 
     @UseGuards(JwtAuthGuard)
